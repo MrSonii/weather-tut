@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import "./App.css";
 import CityElement from "./comps/cityElement";
 
@@ -62,6 +64,7 @@ export default function App() {
         <br></br>
         <p>Now as u have arrived ,click on your city to check its weather</p>
       </h1>
+      <Link to='/details'>Go</Link>
       <div className="city-cont">
         {cityData.map((val) => (
           <CityElement
