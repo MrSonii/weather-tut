@@ -19,9 +19,8 @@
 }
 
 .header {
-  width: 100vw;
+  padding: 10px 50px;
   text-align: center;
-  line-height: 1.6;
   border: 3px dotted;
   font-size: 1.8rem;
 }
@@ -37,7 +36,7 @@
 }
 
 .city-button {
-  flex: 0 0 26%;
+  flex-basis: 26%;
   font-size: 1.5rem;
   padding: 5px;
 }

@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 import "./App.css";
 import CityButton from "./comps/cityButton";
-import HandleWeatherdata from "./comps/handleWeatherdata";
 
 const cityData = [
   {
