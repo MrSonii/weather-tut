@@ -1,35 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {
-  BrowserRouter,
-  Routes,
-  Route
-} from "react-router-dom"
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-
-// ReactDOM.render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-//   document.getElementById('root')
-// );
-
-const Temp = () => <h1>Hey, you are at the detials page!</h1>
+import "./index.css";
+import HandleWeatherdata from "./comps/handleWeatherdata";
+import App from "./App";
+import "./App.css";
+import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<App />} />
-        <Route path='/details' element={<Temp />} />
+        <Route path="/" element={<App />} />
+        <Route path="/weatherPage" element={<HandleWeatherdata />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
+
+// weather api key "396b7a7f0b4c24e721bb411af8dad436"
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

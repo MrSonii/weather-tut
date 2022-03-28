@@ -16,25 +16,23 @@
 
 .small-text {
   font-size: 1rem;
-  line-height: 250%;
 }
 
 .header {
-  height: 15%;
   width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-content: space-evenly;
-  flex-wrap: wrap;
+  text-align: center;
+  line-height: 1.6;
   border: 3px dotted;
   font-size: 1.8rem;
 }
 
 .city-cont {
   height: 50%;
+  width: 60%;
+  background: black;
   display: flex;
   justify-content: space-around;
-  align-content: space-between;
+  align-content: space-around;
   flex-wrap: wrap;
 }
 
