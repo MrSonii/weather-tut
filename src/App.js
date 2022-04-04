@@ -61,9 +61,16 @@ export default function App() {
         Now as u have arrived ,click on your city to check its weather
       </h1>
       <div className="city-cont">
-        {cityData.map((val) => (
-          <Link to="/weatherPage" state={{ val }} key={val.cityName}>
-            <CityButton data={val} />
+        {cityData.map((city) => (
+          <Link
+            to={{
+              pathname: "/weatherPage",
+              state: { citydata: city, masterData: cityData },
+            }}
+            state={{ val: { citydata: city, masterData: cityData } }}
+            key={city.cityName}
+          >
+            <CityButton data={city} />
           </Link>
         ))}
       </div>

@@ -4,6 +4,19 @@
   box-sizing: border-box;
 }
 
+.error-screen {
+  width: 50%;
+  height: 30%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border: 1px dotted;
+}
+
 .head-part {
   padding: 10px;
   margin-bottom: 5px;
@@ -31,7 +44,7 @@
   flex: 0 0 96.5%;
 }
 
-.main {
+.flex {
   display: flex;
 }
 
@@ -72,7 +85,10 @@
 }
 
 .body-part {
-  flex: 0 0 100%;
+  flex: 0 0 100vw;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   transform: translate(-20%);
   transition: all 100ms linear;
 }
@@ -86,9 +102,9 @@
 }
 
 .temp-report-style {
-  flex: 0 0 100%;
-  font-size: 1.5rem;
-  padding: 50px;
+  font-size: 1.2rem;
+  border: 1px dotted;
+  padding: 10px;
   height: 50%;
   display: flex;
   flex-wrap: wrap;
@@ -105,6 +121,7 @@
 }
 
 .move-bodyPart {
-  flex: 0 0 80%;
+  flex: 0 0 79vw;
+  margin: 5px;
   transform: translate(0%);
 }

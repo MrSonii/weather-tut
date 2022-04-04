@@ -1,76 +1,160 @@
 import { useLocation } from "react-router-dom";
 import { get } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import "./weatherPage.css";
 
-export default function H1andleWeatherdata() {
-  const [temp, setTemp] = useState("");
-  const [feelsLike, setFeelsLike] = useState("");
-  const [navClass, setNavClass] = useState("");
-  const [bodyClass, setBodyClass] = useState("");
-
-  const { val } = useLocation().state;
-  const lat = val.latitude;
-  const lon = val.longitude;
-
-  function handleClass() {
-    if (navClass === "" && bodyClass === "") {
-      setNavClass("show-navBar");
-      setBodyClass("move-bodyPart");
-    } else {
-      setNavClass("");
-      setBodyClass("");
-    }
+function handleClass(setNavClass, setBodyClass, navClass, bodyClass) {
+  if (navClass === "" && bodyClass === "") {
+    setNavClass("show-navBar");
+    setBodyClass("move-bodyPart");
+  } else {
+    setNavClass("");
+    setBodyClass("");
   }
+}
 
+function forFirstRender({ resp, setData }) {
+  const { temp, feels_like: feelsLike } = resp.data.hourly[0];
+  const newState = {
+    temp,
+    feelsLike,
+  };
+
+  setData(newState);
+}
+
+function comparisonHandlerCB({ resp, setData, data: { city } }) {
+  const { temp, feels_like: feelsLike } = resp.data.hourly[0];
+  const compData = {
+    temp,
+    feelsLike,
+    city,
+  };
+
+  setData(compData);
+}
+
+function handleGetThenCatch({ data, callback, setData, setError }) {
+  const { lat, lon } = data;
   get(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,daily&units=metric&appid=396b7a7f0b4c24e721bb411af8dad436`
-  ).then((resp) => {
-    const hourlyTemp = resp.data.hourly[0].temp;
-    const hourlyFeel = resp.data.hourly[0].feels_like;
+  )
+    .then((resp) => {
+      callback({ resp, setData, data });
+    })
+    .catch((err) => {
+      setError(err);
+    });
+}
 
-    setTemp(hourlyTemp);
-    setFeelsLike(hourlyFeel);
-  });
+// function handleComparisonScreen({
+//   city,
+//   lat,
+//   lon,
+//   setError,
+//   setData,
+//   setCompData,
+// }) {
+//   handleGetThenCatch({ lat, lon, setError, setData });
+//   const newState = {
+//     city
+//   }
+// }
 
-  const cityNames = [
-    "Fatehabad",
-    "Hisar",
-    "Sirsa",
-    "Chandigarh",
-    "Mohali",
-    "Delhi",
-    "Hamirpur",
-    "Ghaziabad",
-    "Sonipat",
-  ];
+export default function H1andleWeatherdata() {
+  const [apiData, setData] = useState({});
+  const [compData, setCompData] = useState({});
+  const [navClass, setNavClass] = useState("");
+  const [bodyClass, setBodyClass] = useState("");
+  const [error, setError] = useState("");
+
+  const { val } = useLocation().state;
+
+  const lat = val.citydata.latitude;
+  const lon = val.citydata.longitude;
+  const masterData = val.masterData;
+
+  console.log(compData);
+
+  useEffect(() => {
+    handleGetThenCatch({
+      data: {
+        lat,
+        lon,
+      },
+      callback: forFirstRender,
+      setData,
+      setError,
+    });
+  }, []);
+
+  const filteredCities = masterData.filter(
+    ({ cityName: city }) => city !== val.citydata.cityName
+  );
+
+  const { temp, feelsLike } = apiData;
+
+  const classes = error !== "" ? "" : "hidden";
   return (
     <div>
+      <div className={`error-screen ${classes}`}>
+        this error occurred: {error}
+      </div>
       <header className="head-part">
-        <p className="menu-button" onClick={handleClass}>
+        <p
+          className="menu-button"
+          onClick={() =>
+            handleClass(setNavClass, setBodyClass, navClass, bodyClass)
+          }
+        >
           &#9776;
         </p>
         <h1 className="page-heading">Weather-Detail-Page</h1>
       </header>
-      <div className="main">
+      <div className="flex">
         <nav className={`nav-bar ${navClass}`}>
           <ul>
             <small className="center-t">
               (NOTE: Click on the city name to compare weather)
             </small>
-            {cityNames.map((city) => (
-              <li key={city}>
-                <a href="#">{city}</a>
-              </li>
-            ))}
+            {filteredCities.map(
+              ({ cityName: city, longitude: lon, latitude: lat }) => (
+                <li key={city}>
+                  <p
+                    onClick={() =>
+                      handleGetThenCatch({
+                        data: {
+                          city,
+                          lat,
+                          lon,
+                        },
+                        callback: comparisonHandlerCB,
+                        setData: setCompData,
+                        setError,
+                      })
+                    }
+                  >
+                    {city}
+                  </p>
+                </li>
+              )
+            )}
           </ul>
         </nav>
-        <div className={`body-part ${bodyClass}`}>
-          <h2 className="heading-part">Hourly-Temperature-Report</h2>
-          <div className="temp-report-style">
-            <p>At this hour of the Day the temperature is : {temp} &deg;C </p>
-            <p>At this hour temperature feels like : {feelsLike} &deg;C</p>
+        <div className="flex">
+          <div className={`body-part ${bodyClass}`}>
+            <div className="temp-report-style">
+              <p>
+                At this hour of the Day the temperature of{" "}
+                {val.citydata.cityName} is : {temp} &deg;C{" "}
+              </p>
+              <p>At this hour temperature feels like : {feelsLike} &deg;C</p>
+            </div>
+            <div className="comparison-screen">
+              <p>At this hour of the Day the temperature of is : &deg;C </p>
+              <p>At this hour temperature feels like : &deg;C</p>
+            </div>
           </div>
         </div>
       </div>
