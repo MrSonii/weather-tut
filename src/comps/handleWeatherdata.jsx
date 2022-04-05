@@ -48,20 +48,6 @@ function handleGetThenCatch({ data, callback, setData, setError }) {
     });
 }
 
-// function handleComparisonScreen({
-//   city,
-//   lat,
-//   lon,
-//   setError,
-//   setData,
-//   setCompData,
-// }) {
-//   handleGetThenCatch({ lat, lon, setError, setData });
-//   const newState = {
-//     city
-//   }
-// }
-
 export default function H1andleWeatherdata() {
   const [apiData, setData] = useState({});
   const [compData, setCompData] = useState({});
@@ -74,8 +60,6 @@ export default function H1andleWeatherdata() {
   const lat = val.citydata.latitude;
   const lon = val.citydata.longitude;
   const masterData = val.masterData;
-
-  console.log(compData);
 
   useEffect(() => {
     handleGetThenCatch({
@@ -96,6 +80,10 @@ export default function H1andleWeatherdata() {
   const { temp, feelsLike } = apiData;
 
   const classes = error !== "" ? "" : "hidden";
+  const comparisonClass = compData !== {} ? "" : "hidden";
+
+  console.log(compData);
+
   return (
     <div>
       <div className={`error-screen ${classes}`}>
@@ -140,6 +128,12 @@ export default function H1andleWeatherdata() {
                 </li>
               )
             )}
+            <button
+              className="close-comparison-button"
+              onClick={() => setCompData({})}
+            >
+              Close Comparison
+            </button>
           </ul>
         </nav>
         <div className="flex">
@@ -151,9 +145,14 @@ export default function H1andleWeatherdata() {
               </p>
               <p>At this hour temperature feels like : {feelsLike} &deg;C</p>
             </div>
-            <div className="comparison-screen">
-              <p>At this hour of the Day the temperature of is : &deg;C </p>
-              <p>At this hour temperature feels like : &deg;C</p>
+            <div className={`temp-report-style ${comparisonClass}`}>
+              <p>
+                At this hour of the Day the temperature {compData.city} of is :{" "}
+                {compData.temp}&deg;C{" "}
+              </p>
+              <p>
+                At this hour temperature feels like : {compData.feelsLike}&deg;C
+              </p>
             </div>
           </div>
         </div>
